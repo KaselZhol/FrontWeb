@@ -28,9 +28,20 @@ export default function EulerPage() {
       const res = await fetch('https://api-modelado.onrender.com/edo/universal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
+        body: JSON.stringify({
+            // Tus datos básicos
+            ecuacion: params.ecuacion, // Asegúrate de usar t**2, no t^2
+            t0: params.t0,
+            y0: params.y0,
+            h: params.h,
+            pasos: params.pasos,
+            
+            // IMPORTANTE: Tu backend revisa estas variables. 
+            // Envíalas como null o string vacío si no las usas para evitar errores de validación.
+            ecuacion_segunda_derivada: "", 
+            solucion_exacta: "" 
+        })
       })
-      
       const data = await res.json()
       
       // Preparamos datos para la gráfica
