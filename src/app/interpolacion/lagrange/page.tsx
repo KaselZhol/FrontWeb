@@ -42,7 +42,7 @@ export default function LagrangePage() {
       }
 
       // 2. Llamar API
-      const res = await fetch('http://127.0.0.1:8000/interpolacion/lagrange', {
+      const res = await fetch('https://srv-d4qfe1re5dus73emp6eg.onrender.com/interpolacion/lagrange', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
