@@ -28,19 +28,21 @@ const calcularModelo = async () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            // 1. Datos básicos
+            // 1. Datos reales
             ecuacion: params.ecuacion,
             t0: params.t0,
             y0: params.y0,
             h: params.h,
             pasos: params.pasos,
             
-            // 2. CORRECCIÓN CLAVE: Usa null en lugar de "" (comillas vacías)
-            // Python prefiere 'None' (null) para decir "no existe".
-            ecuacion_segunda_derivada: null, 
-            solucion_exacta: null,
+            // 2. EL TRUCO DEL CERO:
+            // Enviamos "0" (string) para que Python tenga algo que leer y no explote.
+            // Al ser Euler, ignorará la segunda derivada matemáticamente, 
+            // pero el código ya no fallará por ser 'None'.
+            ecuacion_segunda_derivada: "0", 
+            solucion_exacta: "0",
 
-            // 3. SEGURIDAD: Agregamos esto por si tu esquema EDOInput lo requiere obligatoriamente
+            // 3. Método explícito
             metodo: "euler"
         })
       })
