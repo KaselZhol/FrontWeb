@@ -38,13 +38,7 @@ export default function EulerPage() {
             y0: params.y0,
             h: params.h,
             pasos: params.pasos,
-            
-            // Enviamos el método que eligió el usuario ("euler" o "taylor2")
             metodo: params.metodo, 
-
-            // LOGICA INTELIGENTE:
-            // Si es Taylor, enviamos lo que escribió el usuario.
-            // Si es Euler, enviamos "0" para que Python no falle por valores nulos.
             ecuacion_segunda_derivada: params.metodo === "taylor2" ? params.segundaDerivada : "0",
             solucion_exacta: "0"
         })
@@ -52,17 +46,18 @@ export default function EulerPage() {
       
       const data = await res.json()
       
-      // Si hubo error en el backend (ej: sintaxis mal escrita)
       if (data.detail) throw new Error(data.detail)
 
-      const datosGrafica = data.grafica.t.map((t: number, i: number) => ({
-        tiempo: t.toFixed(2),
+      // --- CAMBIO REALIZADO: .t por .x ---
+      const datosGrafica = data.grafica.x.map((x_val: number, i: number) => ({
+        tiempo: x_val.toFixed(2),
         valor: data.grafica.y[i]
       }))
 
       setResultado({ ...data, datosGrafica })
     } catch (error) {
-      alert("Error al calcular. Revisa que la ecuación sea válida (ej: t**2).")
+      console.error(error) // Mira la consola para ver el error real si pasa de nuevo
+      alert("Error al procesar los datos.")
     } finally {
       setLoading(false)
     }
