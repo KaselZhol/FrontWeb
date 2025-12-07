@@ -96,7 +96,6 @@ export default function AjustePage() {
                 {resultado && (
                     <Card className="bg-slate-900 text-white">
                         <CardContent className="pt-6">
-                            <div className="text-xl font-mono mb-4 text-center text-orange-400">{resultado.ecuacion_texto}</div>
                             <div className="grid grid-cols-3 gap-4 text-sm text-slate-400 text-center border-t border-slate-800 pt-4">
                                 <div>
                                     <div className="font-bold text-white text-lg">{resultado.metricas.r2.toFixed(4)}</div>
@@ -106,9 +105,17 @@ export default function AjustePage() {
                                     <div className="font-bold text-white text-lg">{resultado.metricas.ecm.toFixed(4)}</div>
                                     <div>Error Cuadrático</div>
                                 </div>
+                                
+                                {/* AQUÍ ESTABA EL ERROR: Agregamos una validación (IF) antes de mostrarlo */}
                                 <div>
-                                    <div className="font-bold text-white text-lg">{resultado.prediccion.y_predicha.toFixed(4)}</div>
-                                    <div>Predicción en X={resultado.prediccion.x_solicitada}</div>
+                                    {resultado.prediccion ? (
+                                        <>
+                                            <div className="font-bold text-white text-lg">{resultado.prediccion.y_predicha.toFixed(4)}</div>
+                                            <div>Predicción en X={resultado.prediccion.x_solicitada}</div>
+                                        </>
+                                    ) : (
+                                        <div className="text-slate-600 italic mt-2">Sin predicción</div>
+                                    )}
                                 </div>
                             </div>
                         </CardContent>
