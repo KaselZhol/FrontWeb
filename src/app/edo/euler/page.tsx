@@ -20,28 +20,38 @@ export default function EulerPage() {
   const [resultado, setResultado] = useState<any>(null)
   const [loading, setLoading] = useState(false)
 
-  const calcularModelo = async () => {
+const calcularModelo = async () => {
     setLoading(true)
     try {
       // ⚠️ IMPORTANTE: Apuntamos a TU URL de Render
-      // En tu backend, Euler está bajo el endpoint '/universal'
       const res = await fetch('https://api-modelado.onrender.com/edo/universal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            // Tus datos básicos
-            ecuacion: params.ecuacion, // Asegúrate de usar t**2, no t^2
+            // 1. Datos básicos
+            ecuacion: params.ecuacion,
             t0: params.t0,
             y0: params.y0,
             h: params.h,
             pasos: params.pasos,
             
-            // IMPORTANTE: Tu backend revisa estas variables. 
-            // Envíalas como null o string vacío si no las usas para evitar errores de validación.
-            ecuacion_segunda_derivada: "", 
-            solucion_exacta: "" 
+            // 2. CORRECCIÓN CLAVE: Usa null en lugar de "" (comillas vacías)
+            // Python prefiere 'None' (null) para decir "no existe".
+            ecuacion_segunda_derivada: null, 
+            solucion_exacta: null,
+
+            // 3. SEGURIDAD: Agregamos esto por si tu esquema EDOInput lo requiere obligatoriamente
+            metodo: "euler"
         })
       })
+      
+      if (!res.ok) {
+        // Esto nos ayuda a ver el error real si vuelve a fallar
+        const errorData = await res.json();
+        console.error("Error del servidor:", errorData);
+        throw new Error("Error en la petición");
+      }
+
       const data = await res.json()
       
       // Preparamos datos para la gráfica
@@ -52,7 +62,7 @@ export default function EulerPage() {
 
       setResultado({ ...data, datosGrafica })
     } catch (error) {
-      alert("Error conectando con el servidor.")
+      alert("Error conectando con el servidor. (Revisa la consola con F12 para más detalles)")
     } finally {
       setLoading(false)
     }
