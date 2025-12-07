@@ -27,7 +27,7 @@ export default function Home() {
     setLoading(true)
     try {
       // NOTA: Asegúrate de que esta URL coincida con tu backend
-      const res = await fetch('https://srv-d4qfe1re5dus73emp6eg.onrender.com/edo/rk4', {
+      const res = await fetch('https://api-modelado.onrender.com/edo/rk4', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(params)
