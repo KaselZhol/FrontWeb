@@ -42,7 +42,7 @@ export default function LagrangePage() {
       }
 
       // 2. Llamar API
-      const res = await fetch('https://api-modelado/interpolacion/lagrange', {
+      const res = await fetch('https://api-modelado.onrender.com/interpolacion/lagrange', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
