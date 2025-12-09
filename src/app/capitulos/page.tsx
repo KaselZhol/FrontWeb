@@ -3,52 +3,89 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Calculator, ArrowLeft, Clock, GraduationCap, ChevronRight, PlayCircle } from "lucide-react"
+import { BookOpen, Calculator, ArrowLeft, Clock, GraduationCap, ChevronRight } from "lucide-react"
 
 export default function CapitulosPage() {
   
-  // Datos de los capítulos (Simulando un curso real)
+  // Datos de los capítulos DESGLOSADOS
   const capitulos = [
+    // --- BLOQUE 1: INTERPOLACIÓN ---
     {
       id: "01",
-      titulo: "Interpolación Polinómica",
-      desc: "Aprende a encontrar funciones que pasen exactamente por puntos de datos conocidos usando Lagrange y Newton.",
-      duracion: "15 min",
-      nivel: "Intermedio",
-      color: "blue",
-      rutaTeoria: "/capitulos/interpolacion", // Crearemos esto después
-      rutaPractica: "/interpolacion/lagrange" // Esto ya existe (Fase 1)
+      titulo: "Interpolación de Lagrange",
+      desc: "El método clásico para encontrar un polinomio único que pase por un conjunto de puntos fijos.",
+      duracion: "10 min",
+      nivel: "Básico",
+      color: "blue", // Azul para Interpolación
+      rutaTeoria: "/capitulos/interpolacion", 
+      rutaPractica: "/interpolacion/lagrange"
     },
     {
       id: "02",
-      titulo: "Ajuste de Curvas (Regresión)",
-      desc: "Descubre cómo modelar tendencias y predecir el futuro minimizando el error cuadrático medio.",
+      titulo: "Interpolación de Newton",
+      desc: "Usa diferencias divididas para construir polinomios de forma eficiente y modular.",
+      duracion: "15 min",
+      nivel: "Intermedio",
+      color: "blue",
+      rutaTeoria: "/capitulos/interpolacion/newton", 
+      rutaPractica: "/interpolacion/newton"
+    },
+
+    // --- BLOQUE 2: AJUSTE DE CURVAS ---
+    {
+      id: "03",
+      titulo: "Ajuste de Curvas (Mínimos Cuadrados)",
+      desc: "Modelado estadístico para encontrar la mejor línea de tendencia en datos con ruido.",
       duracion: "20 min",
       nivel: "Fácil",
-      color: "orange",
+      color: "orange", // Naranja para Ajuste
       rutaTeoria: "/capitulos/ajuste",
       rutaPractica: "/ajuste"
     },
-    {
-      id: "03",
-      titulo: "Integración Numérica",
-      desc: "Calcula el área bajo la curva de funciones imposibles de integrar analíticamente con Simpson y Trapecio.",
-      duracion: "25 min",
-      nivel: "Difícil",
-      color: "emerald",
-      rutaTeoria: "/capitulos/integracion",
-      rutaPractica: "/integracion"
-    },
+
+    // --- BLOQUE 3: INTEGRACIÓN ---
     {
       id: "04",
-      titulo: "Ecuaciones Diferenciales (EDO)",
-      desc: "Simula fenómenos físicos que cambian en el tiempo. Desde la caída libre hasta circuitos eléctricos.",
+      titulo: "Integración: Regla del Trapecio",
+      desc: "Aproximación de áreas bajo la curva usando trapecios lineales entre puntos.",
+      duracion: "10 min",
+      nivel: "Básico",
+      color: "emerald", // Verde para Integración
+      rutaTeoria: "/capitulos/integracion/trapecio",
+      rutaPractica: "/integracion" // Asume que el simulador tiene selector o es el mismo
+    },
+    {
+      id: "05",
+      titulo: "Integración: Regla de Simpson",
+      desc: "Método avanzado que usa parábolas (Simpson 1/3) para reducir drásticamente el error.",
+      duracion: "15 min",
+      nivel: "Intermedio",
+      color: "emerald",
+      rutaTeoria: "/capitulos/integracion/simpson",
+      rutaPractica: "/integracion"
+    },
+
+    // --- BLOQUE 4: ECUACIONES DIFERENCIALES ---
+    {
+      id: "06",
+      titulo: "EDO: Método de Euler",
+      desc: "El método fundamental de primer orden para simular la evolución de sistemas dinámicos.",
+      duracion: "20 min",
+      nivel: "Intermedio",
+      color: "indigo", // Índigo para EDOs
+      rutaTeoria: "/capitulos/edo/euler",
+      rutaPractica: "/edo/euler"
+    },
+    {
+      id: "07",
+      titulo: "EDO: Runge-Kutta (RK2 y RK4)",
+      desc: "El estándar de oro en ingeniería. Alta precisión evaluando la pendiente en múltiples puntos.",
       duracion: "30 min",
       nivel: "Avanzado",
       color: "indigo",
-      rutaTeoria: "/capitulos/edo",
+      rutaTeoria: "/capitulos/edo/rk",
       rutaPractica: "/edo/rk4"
     }
   ]
@@ -134,7 +171,7 @@ export default function CapitulosPage() {
 
                     {/* BOTONES DE ACCIÓN */}
                     <div className="flex flex-col sm:flex-row gap-4">
-                      {/* 1. Botón Teoría (Futuro) */}
+                      {/* 1. Botón Teoría */}
                       <Link href={cap.rutaTeoria}>
                         <Button className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 gap-2">
                            <BookOpen className="h-4 w-4" />
@@ -142,7 +179,7 @@ export default function CapitulosPage() {
                         </Button>
                       </Link>
 
-                      {/* 2. Botón Práctica (Ya funciona) */}
+                      {/* 2. Botón Práctica */}
                       <Link href={cap.rutaPractica}>
                         <Button variant="outline" className="w-full sm:w-auto border-slate-300 hover:bg-slate-50 gap-2 group/btn">
                            <Calculator className="h-4 w-4 text-slate-500 group-hover/btn:text-blue-600 transition-colors" />
