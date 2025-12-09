@@ -13,16 +13,12 @@ export default function MathBackground() {
 
     let animationFrameId: number
     let particles: any[] = []
-    const symbols = ['π', '∑', '∫', '∞', '≈', '≠', '√', '∆', '0', '1', 'x', 'y', 'e', '∂']
+    // Agregamos más símbolos griegos para que se vea más "científico"
+    const symbols = ['π', '∑', '∫', '∞', '≈', '≠', '√', '∆', 'λ', 'θ', 'Ω', '∂', 'f(x)']
 
     const resizeCanvas = () => {
-      if (canvas.parentElement) {
-        canvas.width = canvas.parentElement.clientWidth
-        canvas.height = canvas.parentElement.clientHeight
-      } else {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-      }
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
       initParticles()
     }
 
@@ -34,38 +30,41 @@ export default function MathBackground() {
         this.x = Math.random() * canvas.width
         // @ts-ignore
         this.y = Math.random() * canvas.height
-        this.size = Math.random() * 20 + 12 
-        this.speedX = (Math.random() - 0.5) * 0.5
-        this.speedY = (Math.random() - 0.5) * 0.5
+        this.size = Math.random() * 20 + 15 // Tamaño legible
+        this.speedX = (Math.random() - 0.5) * 0.8 
+        this.speedY = (Math.random() - 0.5) * 0.8
         this.symbol = symbols[Math.floor(Math.random() * symbols.length)]
-        this.opacity = Math.random() * 0.4 + 0.1 
+        // CAMBIO DE OPACIDAD: Entre 15% y 40%. Perfecto para fondo.
+        this.opacity = Math.random() * 0.25 + 0.15 
       }
 
       update() {
         this.x += this.speedX
         this.y += this.speedY
         // @ts-ignore
-        if (this.x > canvas.width + 50) this.x = -50
+        if (this.x > canvas.width) this.x = 0
         // @ts-ignore
-        if (this.x < -50) this.x = canvas.width + 50
+        if (this.x < 0) this.x = canvas.width
         // @ts-ignore
-        if (this.y > canvas.height + 50) this.y = -50
+        if (this.y > canvas.height) this.y = 0
         // @ts-ignore
-        if (this.y < -50) this.y = canvas.height + 50
+        if (this.y < 0) this.y = canvas.height
       }
 
       draw() {
         if (!ctx) return
-        // COLOR: GRIS OSCURO (Slate-800) para que se vea sobre fondo blanco
-        ctx.fillStyle = `rgba(30, 41, 59, ${this.opacity})` 
-        ctx.font = `${this.size}px Arial`
+        // CAMBIO DE COLOR: Usamos un 'Slate-600' (Azul grisáceo) en vez de negro puro.
+        // Se ve mucho más moderno y tecnológico.
+        ctx.fillStyle = `rgba(71, 85, 105, ${this.opacity})` 
+        ctx.font = `500 ${this.size}px 'Geist Mono', monospace, Arial` // Fuente monoespaciada si es posible
         ctx.fillText(this.symbol, this.x, this.y)
       }
     }
 
     const initParticles = () => {
       particles = []
-      for (let i = 0; i < 60; i++) {
+      // 70 partículas para llenar bien la pantalla sin saturar
+      for (let i = 0; i < 70; i++) {
         particles.push(new Particle())
       }
     }
@@ -92,7 +91,7 @@ export default function MathBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full -z-20 pointer-events-none"
+      className="w-full h-full block"
     />
   )
 }
