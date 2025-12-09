@@ -45,38 +45,57 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* HERO SECTION */}
-      <section className="relative overflow-hidden pt-16 pb-32 lg:pt-32">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-white to-white opacity-50"></div>
+      {/* HERO SECTION CON VIDEO DE FONDO */}
+      {/* Usamos 'relative' aquí para que los elementos 'absolute' de adentro se posicionen respecto a esta sección */}
+      <section className="relative overflow-hidden pt-32 pb-40 lg:pt-48 lg:pb-56">
         
-        <div className="max-w-6xl mx-auto px-6 text-center">
+        {/* 1. EL VIDEO DE FONDO (Z-Index -20, el más atrás) */}
+        {/* IMPORTANTE: Asegúrate de que tu video esté en la carpeta /public y se llame hero-background.mp4 */}
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline // Importante para que funcione en iOS sin ponerse en pantalla completa
+          className="absolute inset-0 w-full h-full object-cover -z-20"
+        >
+            {/* La ruta empieza con / porque está en la carpeta public */}
+            <source src="/hero-background.mp4" type="video/mp4" />
+            Tu navegador no soporta videos HTML5.
+        </video>
+
+        {/* 2. CAPA DE SUPERPOSICIÓN (OVERLAY) (Z-Index -10, en medio) */}
+        {/* Esto es una capa blanca semitransparente (bg-white/80) para que el texto sea legible sobre el video.
+            Ajusta el '/80' (opacidad) según qué tan oscuro o claro sea tu video. */}
+        <div className="absolute inset-0 bg-white/80 -z-10 backdrop-blur-[2px]"></div>
+        
+        {/* 3. EL CONTENIDO (Z-Index por defecto 0, al frente) */}
+        <div className="relative max-w-6xl mx-auto px-6 text-center z-10">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+            <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium rounded-full bg-white/80 text-slate-700 border border-slate-200 backdrop-blur-md shadow-sm">
               v2.0 • Motor Matemático Harvard
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6">
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 drop-shadow-sm">
               Matemáticas complejas, <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">
                 resueltas en segundos.
               </span>
             </h1>
-            <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-xl text-slate-600 font-medium max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-sm">
               La plataforma definitiva para estudiantes de ingeniería. Sube tu problema, 
               deja que la IA lo analice y obtén la solución paso a paso con nuestros algoritmos numéricos.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="h-12 px-8 rounded-full text-lg bg-slate-900 hover:bg-slate-800 shadow-xl shadow-slate-200/50 group">
+              <Button size="lg" className="h-12 px-8 rounded-full text-lg bg-slate-900 hover:bg-slate-800 shadow-xl shadow-slate-900/20 group">
                 Explorar Métodos
                 <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
               
-              {/* ESTE SERÁ EL BOTÓN DE LA IA EN EL FUTURO */}
-              <Button size="lg" variant="outline" className="h-12 px-8 rounded-full text-lg border-slate-300 hover:bg-slate-50 text-slate-600 gap-2">
+              <Button size="lg" variant="outline" className="h-12 px-8 rounded-full text-lg border-slate-400 bg-white/50 hover:bg-white text-slate-700 gap-2 backdrop-blur-md transition-all">
                 <Camera className="h-5 w-5" />
                 Escanear Problema (Beta)
               </Button>
@@ -85,8 +104,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FEATURES GRID */}
-      <section className="py-20 bg-slate-50/50 border-t border-slate-100">
+      {/* FEATURES GRID (Sin cambios) */}
+      <section className="py-20 bg-slate-50/80 border-t border-slate-100 relative z-10">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between mb-12">
             <div>
@@ -109,7 +128,7 @@ export default function HomePage() {
                 transition={{ delay: i * 0.1 }}
               >
                 <Link href={feat.href}>
-                  <Card className={`h-full hover:shadow-lg transition-all duration-300 cursor-pointer border hover:border-blue-300 group ${feat.border}`}>
+                  <Card className={`h-full hover:shadow-lg transition-all duration-300 cursor-pointer border hover:border-blue-300 group ${feat.border} bg-white/80 backdrop-blur-sm`}>
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
                         <div className={`p-4 rounded-xl ${feat.color} group-hover:scale-110 transition-transform duration-300`}>
