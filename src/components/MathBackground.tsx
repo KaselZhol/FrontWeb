@@ -6,79 +6,79 @@ export default function MathBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    // 1. DIAGNÓSTICO: Mensaje en consola
-    console.log("🟢 MathBackground: Iniciando componente...")
-
     const canvas = canvasRef.current
-    if (!canvas) {
-        console.error("🔴 Error: No se encontró la referencia al Canvas")
-        return
-    }
-
+    if (!canvas) return
     const ctx = canvas.getContext('2d')
-    if (!ctx) {
-        console.error("🔴 Error: No se pudo obtener el contexto 2D")
-        return
-    }
+    if (!ctx) return
 
     let animationFrameId: number
     let particles: any[] = []
-    const symbols = ['π', '∑', '∫', '∞', '≈', '≠', '√', '∆', '0', '1', 'x', 'y']
+    // Símbolos matemáticos para la animación
+    const symbols = ['π', '∑', '∫', '∞', '≈', '≠', '√', '∆', '0', '1', 'x', 'y', 'e', '∂', 'λ', 'θ']
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      // Ajustamos el tamaño al de la sección padre, no a la ventana completa, para evitar scrollbars
+      if (canvas.parentElement) {
+        canvas.width = canvas.parentElement.clientWidth
+        canvas.height = canvas.parentElement.clientHeight
+      } else {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+      }
       initParticles()
     }
 
     class Particle {
-      x: number; y: number; size: number; speedX: number; speedY: number; symbol: string
+      x: number; y: number; size: number; speedX: number; speedY: number; symbol: string; opacity: number
 
       constructor() {
         // @ts-ignore
         this.x = Math.random() * canvas.width
         // @ts-ignore
         this.y = Math.random() * canvas.height
-        this.size = 30 // TAMAÑO GIGANTE PARA PRUEBA
-        this.speedX = (Math.random() - 0.5) * 2 // VELOCIDAD RÁPIDA
-        this.speedY = (Math.random() - 0.5) * 2
+        this.size = Math.random() * 20 + 14 // Tamaño entre 14px y 34px (Más grandes para que se vean)
+        this.speedX = (Math.random() - 0.5) * 0.5 // Velocidad lenta y elegante
+        this.speedY = (Math.random() - 0.5) * 0.5
         this.symbol = symbols[Math.floor(Math.random() * symbols.length)]
+        // OPACIDAD: Entre 0.1 y 0.4 (Sutil pero visible)
+        this.opacity = Math.random() * 0.3 + 0.1 
       }
 
       update() {
         this.x += this.speedX
         this.y += this.speedY
+
         // @ts-ignore
-        if (this.x > canvas.width) this.x = 0
+        if (this.x > canvas.width + 50) this.x = -50
         // @ts-ignore
-        if (this.x < 0) this.x = canvas.width
+        if (this.x < -50) this.x = canvas.width + 50
         // @ts-ignore
-        if (this.y > canvas.height) this.y = 0
+        if (this.y > canvas.height + 50) this.y = -50
         // @ts-ignore
-        if (this.y < 0) this.y = canvas.height
+        if (this.y < -50) this.y = canvas.height + 50
       }
 
       draw() {
         if (!ctx) return
-        // COLOR ROJO FOSFORESCENTE PARA PRUEBA
-        ctx.fillStyle = 'red' 
-        ctx.font = `bold ${this.size}px Arial`
+        // COLOR: Slate-900 (Casi negro) con transparencia.
+        // Esto garantiza que se vean sobre fondo blanco.
+        ctx.fillStyle = `rgba(15, 23, 42, ${this.opacity})` 
+        ctx.font = `${this.size}px Arial`
         ctx.fillText(this.symbol, this.x, this.y)
       }
     }
 
     const initParticles = () => {
       particles = []
-      for (let i = 0; i < 50; i++) {
+      // Creamos 60 partículas
+      for (let i = 0; i < 60; i++) {
         particles.push(new Particle())
       }
-      console.log("🟢 Partículas creadas: ", particles.length)
     }
 
     const animate = () => {
-      // Limpiar con un color amarillo suave para ver si el canvas ocupa espacio
-      ctx.fillStyle = '#fff9c4' 
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      // Limpiamos el canvas en cada cuadro (Transparente)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
       
       for (let i = 0; i < particles.length; i++) {
         particles[i].update()
@@ -97,19 +97,11 @@ export default function MathBackground() {
     }
   }, [])
 
-  // Quitamos clases de Tailwind para asegurar que CSS no lo oculte
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: -20, // Muy atrás
-        background: 'yellow' // Fondo amarillo de prueba
-      }}
+      className="absolute inset-0 w-full h-full -z-20 pointer-events-none"
+      // Quitamos el fondo amarillo, ahora es transparente para verse sobre el blanco de la página
     />
   )
 }

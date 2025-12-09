@@ -54,7 +54,7 @@ export default function HomePage() {
         <MathBackground />
 
         {/* CAPA SUPERPOSICIÓN: bg-white/30 para que se vean los símbolos oscuros */}
-        <div className="absolute inset-0 bg-white/30 -z-10 backdrop-blur-[1px]"></div>
+        <div className="absolute inset-0 bg-white/50 -z-10 backdrop-blur-[1px]"></div>
         
         <div className="relative max-w-6xl mx-auto px-6 text-center z-10">
           <motion.div 
