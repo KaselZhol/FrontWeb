@@ -1,7 +1,6 @@
 "use client"
 
-// 1. CORRECCIÓN IMPORTANTE: Quitamos el "/ui/" de la ruta.
-// Asegúrate que el archivo esté en src/components/MathBackground.tsx
+// 👇 VERIFICA ESTA RUTA: Si tu archivo está en 'components/ui', agrega el /ui/
 import MathBackground from "@/components/MathBackground" 
 
 import Link from "next/link"
@@ -13,136 +12,78 @@ import { motion } from "framer-motion"
 
 export default function HomePage() {
   const features = [
-    {
-      title: "Ecuaciones Diferenciales",
-      desc: "Simula sistemas dinámicos con Euler, Heun, Taylor y Runge-Kutta 4.",
-      icon: Activity,
-      href: "/edo/rk4",
-      color: "bg-blue-500/10 text-blue-600",
-      border: "border-blue-200"
-    },
-    {
-      title: "Integración Numérica",
-      desc: "Calcula áreas bajo la curva con alta precisión usando Simpson y Trapecio.",
-      icon: Sigma,
-      href: "/integracion",
-      color: "bg-emerald-500/10 text-emerald-600",
-      border: "border-emerald-200"
-    },
-    {
-      title: "Interpolación",
-      desc: "Encuentra el polinomio desconocido a partir de datos dispersos (Lagrange/Newton).",
-      icon: Calculator,
-      href: "/interpolacion/lagrange",
-      color: "bg-purple-500/10 text-purple-600",
-      border: "border-purple-200"
-    },
-    {
-      title: "Ajuste de Curvas",
-      desc: "Modelado predictivo y regresiones lineales o polinómicas.",
-      icon: TrendingUp,
-      href: "/ajuste",
-      color: "bg-orange-500/10 text-orange-600",
-      border: "border-orange-200"
-    }
+    { title: "Ecuaciones Diferenciales", desc: "Simula sistemas dinámicos.", icon: Activity, href: "/edo/rk4", color: "bg-blue-100 text-blue-600", border: "border-blue-200" },
+    { title: "Integración Numérica", desc: "Calcula áreas bajo la curva.", icon: Sigma, href: "/integracion", color: "bg-emerald-100 text-emerald-600", border: "border-emerald-200" },
+    { title: "Interpolación", desc: "Lagrange y Newton.", icon: Calculator, href: "/interpolacion/lagrange", color: "bg-purple-100 text-purple-600", border: "border-purple-200" },
+    { title: "Ajuste de Curvas", desc: "Regresiones lineales.", icon: TrendingUp, href: "/ajuste", color: "bg-orange-100 text-orange-600", border: "border-orange-200" }
   ]
 
   return (
     <div className="min-h-screen bg-white">
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden pt-32 pb-40 lg:pt-48 lg:pb-56">
-        
-        {/* FONDO ANIMADO */}
-        <MathBackground />
+      {/* Usamos 'relative' para contener las capas absolutas */}
+      <section className="relative w-full h-auto overflow-hidden">
 
-        {/* CAPA DE SUPERPOSICIÓN: Blanco semitransparente */}
-        <div className="absolute inset-0 bg-white/40 -z-10 backdrop-blur-[1px]"></div>
+        {/* --- CAPA 0 (FONDO): EL CANVAS --- */}
+        <div className="absolute inset-0 z-0">
+            <MathBackground />
+        </div>
+
+        {/* --- CAPA 1 (MEDIO): EL COLOR BLANCO TRANSPARENTE --- */}
+        {/* z-10 asegura que esté ENCIMA del canvas */}
+        <div className="absolute inset-0 z-10 bg-white/50 backdrop-blur-[1px]"></div>
         
-        {/* CONTENIDO */}
-        <div className="relative max-w-6xl mx-auto px-6 text-center z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium rounded-full bg-white/80 text-slate-700 border border-slate-200 backdrop-blur-md shadow-sm">
+        {/* --- CAPA 2 (FRENTE): EL CONTENIDO --- */}
+        {/* z-20 asegura que esté ENCIMA de todo lo anterior */}
+        <div className="relative z-20 pt-32 pb-40 lg:pt-48 lg:pb-56 max-w-6xl mx-auto px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            
+            <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium rounded-full bg-white/80 text-slate-700 border border-slate-200 shadow-sm">
               v2.0 • Motor Matemático Harvard
             </Badge>
+            
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 drop-shadow-sm">
               Matemáticas complejas, <br/>
-              {/* 2. CORRECCIÓN IMPORTANTE: 'to-r' (no rigth) */}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">
                 resueltas en segundos.
               </span>
             </h1>
-            <p className="text-xl text-slate-600 font-medium max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-sm">
-              La plataforma definitiva para estudiantes de ingeniería. Sube tu problema, 
-              deja que la IA lo analice y obtén la solución paso a paso con nuestros algoritmos numéricos.
+            
+            <p className="text-xl text-slate-600 font-medium max-w-2xl mx-auto mb-10 leading-relaxed">
+              La plataforma definitiva para estudiantes de ingeniería.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="h-12 px-8 rounded-full text-lg bg-slate-900 hover:bg-slate-800 shadow-xl shadow-slate-900/20 group">
-                Explorar Métodos
-                <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <div className="flex justify-center gap-4">
+              <Button size="lg" className="h-12 px-8 rounded-full bg-slate-900 hover:bg-slate-800 shadow-xl group">
+                Explorar Métodos <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-              
-              <Button size="lg" variant="outline" className="h-12 px-8 rounded-full text-lg border-slate-400 bg-white/50 hover:bg-white text-slate-700 gap-2 backdrop-blur-md transition-all">
-                <Camera className="h-5 w-5" />
-                Escanear Problema (Beta)
+              <Button size="lg" variant="outline" className="h-12 px-8 rounded-full bg-white/60 hover:bg-white text-slate-700 border-slate-400">
+                <Camera className="mr-2 h-5 w-5" /> Escanear Problema
               </Button>
             </div>
+
           </motion.div>
         </div>
       </section>
 
-      {/* FEATURES GRID */}
-      <section className="py-20 bg-slate-50/80 border-t border-slate-100 relative z-10">
+      {/* FEATURES SECTION */}
+      <section className="py-20 bg-slate-50/90 border-t border-slate-200 relative z-20">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-3xl font-bold text-slate-900">Laboratorio Numérico</h2>
-              <p className="text-slate-500 mt-2">Selecciona un módulo para comenzar a simular.</p>
-            </div>
-            <div className="hidden md:flex items-center gap-2 text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-              <Brain className="h-4 w-4" />
-              Potenciado por Python & NumPy
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {features.map((feat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <Link href={feat.href}>
-                  <Card className={`h-full hover:shadow-lg transition-all duration-300 cursor-pointer border hover:border-blue-300 group ${feat.border} bg-white/80 backdrop-blur-sm`}>
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className={`p-4 rounded-xl ${feat.color} group-hover:scale-110 transition-transform duration-300`}>
-                          <feat.icon size={28} strokeWidth={2.5} />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
-                            {feat.title}
-                          </h3>
-                          <p className="text-slate-500 mt-2 leading-relaxed">
-                            {feat.desc}
-                          </p>
-                        </div>
-                        <div className="ml-auto self-center opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0">
-                          <ArrowRight className="text-slate-400" />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
+              <Link href={feat.href} key={i}>
+                <Card className="h-full hover:shadow-lg transition-all cursor-pointer border hover:border-blue-400 bg-white group">
+                  <CardContent className="p-6 flex items-center gap-4">
+                    <div className={`p-4 rounded-xl ${feat.color} group-hover:scale-110 transition-transform`}><feat.icon size={28}/></div>
+                    <div>
+                        <h3 className="text-xl font-bold text-slate-900">{feat.title}</h3>
+                        <p className="text-slate-500 mt-1">{feat.desc}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
-          </div>
+           </div>
         </div>
       </section>
     </div>
