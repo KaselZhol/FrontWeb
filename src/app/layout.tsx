@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google"; // <--- CAMBIO 1: Importamos Inter correctamente
 import "./globals.css";
 import { Sidebar } from "@/components/ui/Sidebar";
-
+import 'katex/dist/katex.min.css';
 // Configuramos la fuente Inter (la estándar de Shadcn)
 const inter = Inter({ subsets: ["latin"] });
 
