@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Camera, Brain, ChevronRight, Activity, Sigma, Calculator, TrendingUp, Zap } from "lucide-react"
 import { motion } from "framer-motion"
-
+import ProblemScanner from "@/components/ProblemScanner"
 export default function HomePage() {
   const features = [
     { 
@@ -94,9 +94,7 @@ export default function HomePage() {
                   Comenzar Ahora
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="h-14 px-8 rounded-full bg-white/50 hover:bg-white text-slate-700 border-slate-300 hover:border-blue-400 backdrop-blur-sm text-base transition-all">
-                <Camera className="mr-2 h-5 w-5 text-blue-600" /> Escanear (Beta)
-              </Button>
+              <ProblemScanner />
             </div>
 
           </motion.div>
