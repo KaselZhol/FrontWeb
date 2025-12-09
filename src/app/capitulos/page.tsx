@@ -18,7 +18,7 @@ export default function CapitulosPage() {
       duracion: "10 min",
       nivel: "Básico",
       color: "blue", 
-      rutaTeoria: "/capitulos/interpolacion", // Mantiene su carpeta original
+      rutaTeoria: "/capitulos/interpolacion",
       rutaPractica: "/interpolacion/lagrange"
     },
     {
@@ -28,7 +28,6 @@ export default function CapitulosPage() {
       duracion: "15 min",
       nivel: "Intermedio",
       color: "blue",
-      // CORRECCIÓN: Apuntamos a la carpeta raíz de capitulos, no dentro de interpolacion
       rutaTeoria: "/capitulos/newton", 
       rutaPractica: "/interpolacion/newton"
     },
@@ -36,7 +35,7 @@ export default function CapitulosPage() {
     // --- BLOQUE 2: AJUSTE DE CURVAS ---
     {
       id: "03",
-      titulo: "Ajuste de Curvas (Mínimos Cuadrados)",
+      titulo: "Ajuste de Curvas (Regresión)",
       desc: "Modelado estadístico para encontrar la mejor línea de tendencia en datos con ruido.",
       duracion: "20 min",
       nivel: "Fácil",
@@ -71,7 +70,7 @@ export default function CapitulosPage() {
     {
       id: "06",
       titulo: "EDO: Método de Euler",
-      desc: "El método fundamental de primer orden para simular la evolución de sistemas dinámicos.",
+      desc: "El método fundamental de primer orden. Simple, pero acumula error si el paso es grande.",
       duracion: "20 min",
       nivel: "Intermedio",
       color: "indigo", 
@@ -80,8 +79,18 @@ export default function CapitulosPage() {
     },
     {
       id: "07",
-      titulo: "EDO: Runge-Kutta (RK2 y RK4)",
-      desc: "El estándar de oro en ingeniería. Alta precisión evaluando la pendiente en múltiples puntos.",
+      titulo: "EDO: Series de Taylor (Orden 2)",
+      desc: "Mejora a Euler incluyendo la segunda derivada (curvatura) para mayor precisión.",
+      duracion: "25 min",
+      nivel: "Avanzado",
+      color: "indigo", 
+      rutaTeoria: "/capitulos/edo/taylor", // <--- NUEVA PÁGINA TEÓRICA
+      rutaPractica: "/edo/euler" // Usa el mismo simulador que Euler (tiene el dropdown)
+    },
+    {
+      id: "08",
+      titulo: "EDO: Runge-Kutta (RK4)",
+      desc: "El estándar de oro. Alta precisión evaluando 4 pendientes por paso sin necesitar derivadas superiores.",
       duracion: "30 min",
       nivel: "Avanzado",
       color: "indigo",
@@ -90,7 +99,6 @@ export default function CapitulosPage() {
     }
   ]
 
-  // Configuración de colores
   const getColorClasses = (color: string) => {
     const map: any = {
       blue: "bg-blue-50 text-blue-700 border-blue-200 hover:border-blue-400",
@@ -103,8 +111,6 @@ export default function CapitulosPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 selection:bg-slate-200">
-      
-      {/* HEADER */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10 backdrop-blur-md bg-white/80">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/">
@@ -119,16 +125,13 @@ export default function CapitulosPage() {
         </div>
       </header>
 
-      {/* CONTENIDO PRINCIPAL */}
       <main className="max-w-5xl mx-auto px-6 py-12">
-        
         <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
             Capítulos Teóricos
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl">
-            Antes de calcular, es fundamental entender el "por qué". 
-            Selecciona un módulo para dominar la base matemática.
+            Desde lo básico hasta algoritmos avanzados. Selecciona un módulo para comenzar.
           </p>
         </div>
 
@@ -142,15 +145,11 @@ export default function CapitulosPage() {
             >
               <Card className={`group transition-all duration-300 hover:shadow-lg border bg-white overflow-hidden`}>
                 <div className="flex flex-col md:flex-row">
-                  
-                  {/* SECCIÓN IZQUIERDA: ID */}
                   <div className={`md:w-24 flex items-center justify-center bg-slate-100 border-b md:border-b-0 md:border-r border-slate-100 group-hover:bg-white transition-colors`}>
                     <span className="text-3xl font-black text-slate-200 group-hover:text-slate-900 transition-colors">
                       {cap.id}
                     </span>
                   </div>
-
-                  {/* SECCIÓN CENTRAL: CONTENIDO */}
                   <div className="flex-1 p-6 md:p-8">
                     <div className="flex flex-wrap items-center gap-3 mb-3">
                       <Badge variant="secondary" className={`font-medium ${getColorClasses(cap.color).split(" ")[1]} bg-opacity-10`}>
@@ -161,23 +160,18 @@ export default function CapitulosPage() {
                         {cap.duracion} lectura
                       </div>
                     </div>
-                    
                     <h2 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-blue-700 transition-colors">
                       {cap.titulo}
                     </h2>
                     <p className="text-slate-500 leading-relaxed mb-6">
                       {cap.desc}
                     </p>
-
-                    {/* BOTONES */}
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Link href={cap.rutaTeoria}>
                         <Button className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 gap-2">
-                           <BookOpen className="h-4 w-4" />
-                           Leer Teoría
+                           <BookOpen className="h-4 w-4" /> Leer Teoría
                         </Button>
                       </Link>
-
                       <Link href={cap.rutaPractica}>
                         <Button variant="outline" className="w-full sm:w-auto border-slate-300 hover:bg-slate-50 gap-2 group/btn">
                            <Calculator className="h-4 w-4 text-slate-500 group-hover/btn:text-blue-600 transition-colors" />
