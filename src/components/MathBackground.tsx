@@ -13,11 +13,9 @@ export default function MathBackground() {
 
     let animationFrameId: number
     let particles: any[] = []
-    // Símbolos matemáticos para la animación
-    const symbols = ['π', '∑', '∫', '∞', '≈', '≠', '√', '∆', '0', '1', 'x', 'y', 'e', '∂', 'λ', 'θ']
+    const symbols = ['π', '∑', '∫', '∞', '≈', '≠', '√', '∆', '0', '1', 'x', 'y', 'e', '∂']
 
     const resizeCanvas = () => {
-      // Ajustamos el tamaño al de la sección padre, no a la ventana completa, para evitar scrollbars
       if (canvas.parentElement) {
         canvas.width = canvas.parentElement.clientWidth
         canvas.height = canvas.parentElement.clientHeight
@@ -36,18 +34,16 @@ export default function MathBackground() {
         this.x = Math.random() * canvas.width
         // @ts-ignore
         this.y = Math.random() * canvas.height
-        this.size = Math.random() * 20 + 14 // Tamaño entre 14px y 34px (Más grandes para que se vean)
-        this.speedX = (Math.random() - 0.5) * 0.5 // Velocidad lenta y elegante
+        this.size = Math.random() * 20 + 12 
+        this.speedX = (Math.random() - 0.5) * 0.5
         this.speedY = (Math.random() - 0.5) * 0.5
         this.symbol = symbols[Math.floor(Math.random() * symbols.length)]
-        // OPACIDAD: Entre 0.1 y 0.4 (Sutil pero visible)
-        this.opacity = Math.random() * 0.3 + 0.1 
+        this.opacity = Math.random() * 0.4 + 0.1 
       }
 
       update() {
         this.x += this.speedX
         this.y += this.speedY
-
         // @ts-ignore
         if (this.x > canvas.width + 50) this.x = -50
         // @ts-ignore
@@ -60,9 +56,8 @@ export default function MathBackground() {
 
       draw() {
         if (!ctx) return
-        // COLOR: Slate-900 (Casi negro) con transparencia.
-        // Esto garantiza que se vean sobre fondo blanco.
-        ctx.fillStyle = `rgba(15, 23, 42, ${this.opacity})` 
+        // COLOR: GRIS OSCURO (Slate-800) para que se vea sobre fondo blanco
+        ctx.fillStyle = `rgba(30, 41, 59, ${this.opacity})` 
         ctx.font = `${this.size}px Arial`
         ctx.fillText(this.symbol, this.x, this.y)
       }
@@ -70,16 +65,13 @@ export default function MathBackground() {
 
     const initParticles = () => {
       particles = []
-      // Creamos 60 partículas
       for (let i = 0; i < 60; i++) {
         particles.push(new Particle())
       }
     }
 
     const animate = () => {
-      // Limpiamos el canvas en cada cuadro (Transparente)
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      
       for (let i = 0; i < particles.length; i++) {
         particles[i].update()
         particles[i].draw()
@@ -101,7 +93,6 @@ export default function MathBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full -z-20 pointer-events-none"
-      // Quitamos el fondo amarillo, ahora es transparente para verse sobre el blanco de la página
     />
   )
 }

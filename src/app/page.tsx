@@ -1,7 +1,9 @@
 "use client"
 
-// 1. CORRECCIÓN: Ruta estándar (sin /ui/ a menos que tú lo hayas movido ahí)
-import MathBackground from "@/components/MathBackground"
+// 1. CORRECCIÓN IMPORTANTE: Quitamos el "/ui/" de la ruta.
+// Asegúrate que el archivo esté en src/components/MathBackground.tsx
+import MathBackground from "@/components/MathBackground" 
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -47,15 +49,16 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* HERO SECTION CON FONDO ANIMADO JS */}
+      {/* HERO SECTION */}
       <section className="relative overflow-hidden pt-32 pb-40 lg:pt-48 lg:pb-56">
         
-        {/* COMPONENTE DE FONDO */}
+        {/* FONDO ANIMADO */}
         <MathBackground />
 
-        {/* CAPA SUPERPOSICIÓN: bg-white/30 para que se vean los símbolos oscuros */}
-        <div className="absolute inset-0 bg-white/50 -z-10 backdrop-blur-[1px]"></div>
+        {/* CAPA DE SUPERPOSICIÓN: Blanco semitransparente */}
+        <div className="absolute inset-0 bg-white/40 -z-10 backdrop-blur-[1px]"></div>
         
+        {/* CONTENIDO */}
         <div className="relative max-w-6xl mx-auto px-6 text-center z-10">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -67,7 +70,7 @@ export default function HomePage() {
             </Badge>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 drop-shadow-sm">
               Matemáticas complejas, <br/>
-              {/* 2. CORRECCIÓN: 'to-r' en lugar de 'to-rigth' */}
+              {/* 2. CORRECCIÓN IMPORTANTE: 'to-r' (no rigth) */}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">
                 resueltas en segundos.
               </span>
