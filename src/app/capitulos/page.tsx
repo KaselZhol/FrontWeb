@@ -9,7 +9,6 @@ import { BookOpen, Calculator, ArrowLeft, Clock, GraduationCap, ChevronRight } f
 
 export default function CapitulosPage() {
   
-  // Datos de los capítulos DESGLOSADOS
   const capitulos = [
     // --- BLOQUE 1: INTERPOLACIÓN ---
     {
@@ -18,8 +17,8 @@ export default function CapitulosPage() {
       desc: "El método clásico para encontrar un polinomio único que pase por un conjunto de puntos fijos.",
       duracion: "10 min",
       nivel: "Básico",
-      color: "blue", // Azul para Interpolación
-      rutaTeoria: "/capitulos/interpolacion", 
+      color: "blue", 
+      rutaTeoria: "/capitulos/interpolacion", // Mantiene su carpeta original
       rutaPractica: "/interpolacion/lagrange"
     },
     {
@@ -29,7 +28,8 @@ export default function CapitulosPage() {
       duracion: "15 min",
       nivel: "Intermedio",
       color: "blue",
-      rutaTeoria: "/capitulos/interpolacion/newton", 
+      // CORRECCIÓN: Apuntamos a la carpeta raíz de capitulos, no dentro de interpolacion
+      rutaTeoria: "/capitulos/newton", 
       rutaPractica: "/interpolacion/newton"
     },
 
@@ -40,7 +40,7 @@ export default function CapitulosPage() {
       desc: "Modelado estadístico para encontrar la mejor línea de tendencia en datos con ruido.",
       duracion: "20 min",
       nivel: "Fácil",
-      color: "orange", // Naranja para Ajuste
+      color: "orange", 
       rutaTeoria: "/capitulos/ajuste",
       rutaPractica: "/ajuste"
     },
@@ -52,9 +52,9 @@ export default function CapitulosPage() {
       desc: "Aproximación de áreas bajo la curva usando trapecios lineales entre puntos.",
       duracion: "10 min",
       nivel: "Básico",
-      color: "emerald", // Verde para Integración
+      color: "emerald", 
       rutaTeoria: "/capitulos/integracion/trapecio",
-      rutaPractica: "/integracion" // Asume que el simulador tiene selector o es el mismo
+      rutaPractica: "/integracion" 
     },
     {
       id: "05",
@@ -74,7 +74,7 @@ export default function CapitulosPage() {
       desc: "El método fundamental de primer orden para simular la evolución de sistemas dinámicos.",
       duracion: "20 min",
       nivel: "Intermedio",
-      color: "indigo", // Índigo para EDOs
+      color: "indigo", 
       rutaTeoria: "/capitulos/edo/euler",
       rutaPractica: "/edo/euler"
     },
@@ -90,7 +90,7 @@ export default function CapitulosPage() {
     }
   ]
 
-  // Configuración de colores dinámica
+  // Configuración de colores
   const getColorClasses = (color: string) => {
     const map: any = {
       blue: "bg-blue-50 text-blue-700 border-blue-200 hover:border-blue-400",
@@ -104,7 +104,7 @@ export default function CapitulosPage() {
   return (
     <div className="min-h-screen bg-slate-50 selection:bg-slate-200">
       
-      {/* HEADER SIMPLE */}
+      {/* HEADER */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10 backdrop-blur-md bg-white/80">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/">
@@ -143,7 +143,7 @@ export default function CapitulosPage() {
               <Card className={`group transition-all duration-300 hover:shadow-lg border bg-white overflow-hidden`}>
                 <div className="flex flex-col md:flex-row">
                   
-                  {/* SECCIÓN IZQUIERDA: ID y DECORACIÓN */}
+                  {/* SECCIÓN IZQUIERDA: ID */}
                   <div className={`md:w-24 flex items-center justify-center bg-slate-100 border-b md:border-b-0 md:border-r border-slate-100 group-hover:bg-white transition-colors`}>
                     <span className="text-3xl font-black text-slate-200 group-hover:text-slate-900 transition-colors">
                       {cap.id}
@@ -169,9 +169,8 @@ export default function CapitulosPage() {
                       {cap.desc}
                     </p>
 
-                    {/* BOTONES DE ACCIÓN */}
+                    {/* BOTONES */}
                     <div className="flex flex-col sm:flex-row gap-4">
-                      {/* 1. Botón Teoría */}
                       <Link href={cap.rutaTeoria}>
                         <Button className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 gap-2">
                            <BookOpen className="h-4 w-4" />
@@ -179,7 +178,6 @@ export default function CapitulosPage() {
                         </Button>
                       </Link>
 
-                      {/* 2. Botón Práctica */}
                       <Link href={cap.rutaPractica}>
                         <Button variant="outline" className="w-full sm:w-auto border-slate-300 hover:bg-slate-50 gap-2 group/btn">
                            <Calculator className="h-4 w-4 text-slate-500 group-hover/btn:text-blue-600 transition-colors" />
@@ -189,13 +187,11 @@ export default function CapitulosPage() {
                       </Link>
                     </div>
                   </div>
-                  
                 </div>
               </Card>
             </motion.div>
           ))}
         </div>
-
       </main>
     </div>
   )
