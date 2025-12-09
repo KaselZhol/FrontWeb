@@ -1,5 +1,7 @@
 "use client"
 
+// 1. Importamos el componente de fondo animado
+import MathBackground from "@/components/ui/MathBackground"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -45,30 +47,17 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* HERO SECTION CON VIDEO DE FONDO */}
-      {/* Usamos 'relative' aquí para que los elementos 'absolute' de adentro se posicionen respecto a esta sección */}
+      {/* HERO SECTION CON FONDO ANIMADO JS (MATHBACKGROUND) */}
       <section className="relative overflow-hidden pt-32 pb-40 lg:pt-48 lg:pb-56">
         
-        {/* 1. EL VIDEO DE FONDO (Z-Index -20, el más atrás) */}
-        {/* IMPORTANTE: Asegúrate de que tu video esté en la carpeta /public y se llame hero-background.mp4 */}
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline // Importante para que funcione en iOS sin ponerse en pantalla completa
-          className="absolute inset-0 w-full h-full object-cover -z-20"
-        >
-            {/* La ruta empieza con / porque está en la carpeta public */}
-            <source src="/hero-background.mp4" type="video/mp4" />
-            Tu navegador no soporta videos HTML5.
-        </video>
+        {/* 1. AQUÍ ESTÁ EL CAMBIO: Usamos el componente en lugar del video */}
+        <MathBackground />
 
-        {/* 2. CAPA DE SUPERPOSICIÓN (OVERLAY) (Z-Index -10, en medio) */}
-        {/* Esto es una capa blanca semitransparente (bg-white/80) para que el texto sea legible sobre el video.
-            Ajusta el '/80' (opacidad) según qué tan oscuro o claro sea tu video. */}
-        <div className="absolute inset-0 bg-white/80 -z-10 backdrop-blur-[2px]"></div>
+        {/* 2. CAPA DE SUPERPOSICIÓN (OVERLAY) */}
+        {/* Usamos white/60 para que se vean bien los símbolos matemáticos del fondo */}
+        <div className="absolute inset-0 bg-white/60 -z-10 backdrop-blur-[1px]"></div>
         
-        {/* 3. EL CONTENIDO (Z-Index por defecto 0, al frente) */}
+        {/* 3. EL CONTENIDO (Texto y botones) */}
         <div className="relative max-w-6xl mx-auto px-6 text-center z-10">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -104,7 +93,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FEATURES GRID (Sin cambios) */}
+      {/* FEATURES GRID (Se mantiene igual) */}
       <section className="py-20 bg-slate-50/80 border-t border-slate-100 relative z-10">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between mb-12">
