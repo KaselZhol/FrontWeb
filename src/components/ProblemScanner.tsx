@@ -1,16 +1,22 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { useRouter } from "next/navigation" // <--- IMPORTANTE PARA REDIRIGIR
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Loader2, Upload, ScanEye } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog"
 
-export default function ProblemScanner() {
+// 1. DEFINIMOS LA INTERFAZ CON LA PROP OPCIONAL (?)
+interface ScannerProps {
+  onScanComplete?: (data: any) => void; 
+}
+
+// 2. RECIBIMOS LA PROP (con valor por defecto vacío)
+export default function ProblemScanner({ onScanComplete }: ScannerProps = {}) {
   const [loading, setLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const router = useRouter() // Hook de navegación
+  const router = useRouter()
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return
@@ -32,18 +38,27 @@ export default function ProblemScanner() {
       const data = await res.json()
       console.log("IA Dice:", data)
 
-      // --- AQUÍ OCURRE LA MAGIA DE LA REDIRECCIÓN ---
+      // --- LÓGICA HÍBRIDA ---
+      
+      // CASO A: Estamos dentro de una herramienta (Ej: RK4)
+      // Si el componente padre nos dio una función, la usamos y NO redirigimos.
+      if (onScanComplete) {
+        // Extraemos solo los parámetros relevantes si vienen anidados
+        const paramsLimpios = data.parametros || data; 
+        onScanComplete(paramsLimpios)
+        setIsOpen(false)
+        return; // Terminamos aquí
+      }
+
+      // CASO B: Estamos en la Home
+      // No hay función, así que usamos la lógica de redirección automática.
       if (data.ruta_sugerida) {
-        // Convertimos los parámetros en una Query String (ej: ?ecuacion=x+2&t0=0)
         const params = new URLSearchParams()
-        
         Object.entries(data.parametros).forEach(([key, value]) => {
             if (value !== null && value !== undefined) {
                 params.append(key, String(value))
             }
         })
-
-        // Redirigimos al usuario a la página correcta con los datos
         setIsOpen(false)
         router.push(`${data.ruta_sugerida}?${params.toString()}`)
       } else {
@@ -61,16 +76,16 @@ export default function ProblemScanner() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        {/* Este es el botón que se verá en la Home */}
-        <Button size="lg" variant="outline" className="h-14 px-8 rounded-full bg-white/50 hover:bg-white text-slate-700 border-slate-300 hover:border-blue-400 backdrop-blur-sm text-base transition-all">
-            <ScanEye className="mr-2 h-5 w-5 text-blue-600" /> Escanear Problema (IA)
+        <Button variant="outline" className="gap-2 border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-800 transition-colors">
+          <ScanEye className="h-4 w-4" />
+          <span className="hidden sm:inline">Escanear</span> IA
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md bg-white">
         <DialogHeader>
           <DialogTitle>Asistente Matemático IA</DialogTitle>
           <DialogDescription>
-            Sube una foto. Yo detectaré si es EDO, Integral o Interpolación y te llevaré a la herramienta correcta.
+            Sube una foto. Yo detectaré los datos y los escribiré por ti.
           </DialogDescription>
         </DialogHeader>
         
@@ -78,7 +93,7 @@ export default function ProblemScanner() {
           {loading ? (
             <div className="text-center space-y-4">
               <Loader2 className="h-12 w-12 animate-spin text-indigo-600 mx-auto" />
-              <p className="text-sm font-medium text-slate-600 animate-pulse">Analizando y clasificando...</p>
+              <p className="text-sm font-medium text-slate-600 animate-pulse">Analizando imagen...</p>
             </div>
           ) : (
             <>
