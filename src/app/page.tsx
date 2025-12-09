@@ -1,7 +1,7 @@
 "use client"
 
 // 1. CORRECCIÓN: Ruta estándar (sin /ui/ a menos que tú lo hayas movido ahí)
-import MathBackground from "@/components/ui/MathBackground"
+import MathBackground from "@/components/MathBackground"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
