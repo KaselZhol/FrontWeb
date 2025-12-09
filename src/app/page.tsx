@@ -55,7 +55,7 @@ export default function HomePage() {
 
         {/* 2. CAPA DE SUPERPOSICIÓN (OVERLAY) */}
         {/* Usamos white/60 para que se vean bien los símbolos matemáticos del fondo */}
-        <div className="absolute inset-0 bg-white/60 -z-10 backdrop-blur-[1px]"></div>
+        <div className="absolute inset-0 bg-white/30 -z-10 backdrop-blur-[1px]"></div>
         
         {/* 3. EL CONTENIDO (Texto y botones) */}
         <div className="relative max-w-6xl mx-auto px-6 text-center z-10">

@@ -44,7 +44,7 @@ export default function MathBackground() {
         this.speedX = (Math.random() - 0.5) * 0.5 
         this.speedY = (Math.random() - 0.5) * 0.5 
         this.symbol = symbols[Math.floor(Math.random() * symbols.length)]
-        this.opacity = Math.random() * 0.3 + 0.1 
+        this.opacity = Math.random() * 0.4 + 0.3 
       }
 
       update() {
@@ -106,4 +106,4 @@ export default function MathBackground() {
       className="absolute inset-0 w-full h-full -z-20 bg-slate-50"
     />
   )
-}
+} 
