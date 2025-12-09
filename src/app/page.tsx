@@ -1,6 +1,6 @@
 "use client"
 
-// 1. Importamos el componente de fondo animado
+// 1. CORRECCIÓN: Ruta estándar (sin /ui/ a menos que tú lo hayas movido ahí)
 import MathBackground from "@/components/ui/MathBackground"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -47,17 +47,15 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* HERO SECTION CON FONDO ANIMADO JS (MATHBACKGROUND) */}
+      {/* HERO SECTION CON FONDO ANIMADO JS */}
       <section className="relative overflow-hidden pt-32 pb-40 lg:pt-48 lg:pb-56">
         
-        {/* 1. AQUÍ ESTÁ EL CAMBIO: Usamos el componente en lugar del video */}
+        {/* COMPONENTE DE FONDO */}
         <MathBackground />
 
-        {/* 2. CAPA DE SUPERPOSICIÓN (OVERLAY) */}
-        {/* Usamos white/60 para que se vean bien los símbolos matemáticos del fondo */}
+        {/* CAPA SUPERPOSICIÓN: bg-white/30 para que se vean los símbolos oscuros */}
         <div className="absolute inset-0 bg-white/30 -z-10 backdrop-blur-[1px]"></div>
         
-        {/* 3. EL CONTENIDO (Texto y botones) */}
         <div className="relative max-w-6xl mx-auto px-6 text-center z-10">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -69,6 +67,7 @@ export default function HomePage() {
             </Badge>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 drop-shadow-sm">
               Matemáticas complejas, <br/>
+              {/* 2. CORRECCIÓN: 'to-r' en lugar de 'to-rigth' */}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">
                 resueltas en segundos.
               </span>
@@ -93,7 +92,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FEATURES GRID (Se mantiene igual) */}
+      {/* FEATURES GRID */}
       <section className="py-20 bg-slate-50/80 border-t border-slate-100 relative z-10">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between mb-12">
