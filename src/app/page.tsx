@@ -88,10 +88,12 @@ export default function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="h-14 px-8 rounded-full bg-slate-900 hover:bg-slate-800 shadow-xl shadow-slate-900/10 hover:shadow-slate-900/20 text-base group transition-all">
-                <Zap className="mr-2 h-4 w-4 fill-yellow-400 text-yellow-400" />
-                Comenzar Ahora
-              </Button>
+              <Link href="/capitulos">
+                <Button size="lg" className="h-14 px-8 rounded-full bg-slate-900 hover:bg-slate-800 shadow-xl shadow-slate-900/10 hover:shadow-slate-900/20 text-base group transition-all">
+                  <Zap className="mr-2 h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  Comenzar Ahora
+                </Button>
+              </Link>
               <Button size="lg" variant="outline" className="h-14 px-8 rounded-full bg-white/50 hover:bg-white text-slate-700 border-slate-300 hover:border-blue-400 backdrop-blur-sm text-base transition-all">
                 <Camera className="mr-2 h-5 w-5 text-blue-600" /> Escanear (Beta)
               </Button>
