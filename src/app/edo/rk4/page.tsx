@@ -71,11 +71,20 @@ function RK4Content() {
       
       if (data.detail) throw new Error(data.detail)
 
-      // Adaptamos la respuesta para la gráfica (Backend devuelve grafica.x, Frontend usa 'tiempo')
-      const datosGrafica = data.grafica.x.map((x_val: number, i: number) => ({
-        tiempo: x_val.toFixed(2),
-        valor: data.grafica.y[i]
-      }))
+      // 🛡️ SOLUCIÓN BLINDADA 1: Validamos que la gráfica exista antes de mapear
+      let datosGrafica = []
+      // Dependiendo de tu backend, puede ser grafica.t (EDO) o grafica.x (General)
+      // Aquí verificamos ambas posibilidades para estar seguros
+      const ejeX = data.grafica?.t || data.grafica?.x
+
+      if (data.grafica && ejeX && data.grafica.y) {
+          datosGrafica = ejeX.map((valX: number, i: number) => ({
+            tiempo: valX.toFixed(2),
+            valor: data.grafica.y[i]
+          }))
+      } else {
+          console.warn("El backend no devolvió datos de gráfica completos:", data)
+      }
       
       setResultado({ ...data, datosGrafica })
     } catch (e) { 
@@ -137,7 +146,7 @@ function RK4Content() {
             {/* GRÁFICA */}
             <Card>
                <CardContent className="h-[350px] pt-6">
-                  {resultado ? (
+                  {resultado && resultado.datosGrafica && resultado.datosGrafica.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={resultado.datosGrafica}>
                         <CartesianGrid strokeDasharray="3 3"/>
@@ -157,7 +166,8 @@ function RK4Content() {
             </Card>
             
             {/* PASO A PASO */}
-            {resultado && (
+            {/* 🛡️ SOLUCIÓN BLINDADA 2: Validamos resultado.pasos antes de mapear */}
+            {resultado && resultado.pasos ? (
                <Card className="bg-slate-50 border-slate-200">
                   <CardHeader><CardTitle className="text-sm uppercase tracking-wider text-slate-500">Historial de Iteraciones</CardTitle></CardHeader>
                   <CardContent className="h-[200px] overflow-y-auto font-mono text-xs p-4">
@@ -168,7 +178,7 @@ function RK4Content() {
                      ))}
                   </CardContent>
                </Card>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
