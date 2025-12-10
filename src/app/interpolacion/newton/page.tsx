@@ -1,15 +1,52 @@
 "use client"
-import { useState } from "react"
+
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Calculator, Table as TableIcon } from "lucide-react"
 
-export default function NewtonPage() {
-  const [inputs, setInputs] = useState({ x_str: "1, 1.3, 1.6, 1.9, 2.2", y_str: "0.76, 0.62, 0.45, 0.28, 0.11", x_eval: 1.5 })
+// Importamos el Escáner
+import ProblemScanner from "@/components/ProblemScanner"
+
+// 1. LÓGICA INTERNA
+function NewtonContent() {
+  const searchParams = useSearchParams()
+
+  const [inputs, setInputs] = useState({
+    x_str: "1, 1.3, 1.6, 1.9, 2.2",
+    y_str: "0.76, 0.62, 0.45, 0.28, 0.11",
+    x_eval: 1.5
+  })
   const [resultado, setResultado] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+
+  // A. EFECTO MAGICO: Detectar listas desde la URL
+  useEffect(() => {
+    const xUrl = searchParams.get("x_str")
+    const yUrl = searchParams.get("y_str")
+    
+    if (xUrl && yUrl) {
+        setInputs(prev => ({
+            ...prev,
+            x_str: xUrl,
+            y_str: yUrl,
+            x_eval: searchParams.get("x_eval") ? parseFloat(searchParams.get("x_eval")!) : prev.x_eval
+        }))
+    }
+  }, [searchParams])
+
+  // B. FUNCIÓN PARA EL ESCÁNER INTERNO
+  const handleAutocompletar = (datosIA: any) => {
+    setInputs(prev => ({
+        ...prev,
+        x_str: datosIA.x_str || prev.x_str,
+        y_str: datosIA.y_str || prev.y_str,
+        x_eval: datosIA.x_eval !== null ? datosIA.x_eval : prev.x_eval
+    }))
+  }
 
   const calcular = async () => {
     setLoading(true)
@@ -17,7 +54,6 @@ export default function NewtonPage() {
       const x_arr = inputs.x_str.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n))
       const y_arr = inputs.y_str.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n))
       
-      // 👇 URL DE PRODUCCIÓN
       const res = await fetch('https://api-modelado.onrender.com/interpolacion/newton', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ x_puntos: x_arr, y_puntos: y_arr, x_eval: inputs.x_eval })
@@ -31,14 +67,21 @@ export default function NewtonPage() {
   return (
     <div className="min-h-screen bg-slate-50 p-8">
       <div className="max-w-5xl mx-auto space-y-8">
+        
         <div className="flex items-center space-x-4 border-b pb-6">
             <div className="p-3 bg-purple-600 rounded-lg shadow"><Calculator className="text-white"/></div>
             <h1 className="text-3xl font-bold text-slate-900">Interpolación de Newton</h1>
         </div>
 
         <Card>
-            <CardHeader><CardTitle>Datos de Entrada</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle>Datos de Entrada</CardTitle>
+                {/* BOTÓN ESCÁNER */}
+                <div className="scale-90 origin-right -mt-4">
+                    <ProblemScanner onScanComplete={handleAutocompletar} />
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-4 mt-2">
                 <div className="grid grid-cols-2 gap-4">
                     <div><Label>X</Label><Input value={inputs.x_str} onChange={e => setInputs({...inputs, x_str: e.target.value})} /></div>
                     <div><Label>Y</Label><Input value={inputs.y_str} onChange={e => setInputs({...inputs, y_str: e.target.value})} /></div>
@@ -80,7 +123,7 @@ export default function NewtonPage() {
                                     <th className="px-4 py-3">xi</th>
                                     <th className="px-4 py-3">f(xi)</th>
                                     {/* Encabezados dinámicos (Orden 1, Orden 2...) */}
-                                    {Array.from({length: resultado.coeficientes.length - 1}).map((_, i) => (
+                                    {resultado.coeficientes && Array.from({length: resultado.coeficientes.length - 1}).map((_, i) => (
                                         <th key={i} className="px-4 py-3 text-purple-700">Orden {i+1}</th>
                                     ))}
                                 </tr>
@@ -90,8 +133,9 @@ export default function NewtonPage() {
                                     <tr key={i} className="hover:bg-slate-50 transition-colors">
                                         <td className="px-4 py-2 font-bold text-slate-400">{i}</td>
                                         <td className="px-4 py-2 font-medium">{x}</td>
-                                        {/* Matriz Triangular */}
-                                        {resultado.tabla_completa[i].map((val: number, j: number) => (
+                                        
+                                        {/* Matriz Triangular: Validamos que exista tabla_completa */}
+                                        {resultado.tabla_completa && resultado.tabla_completa[i] && resultado.tabla_completa[i].map((val: number, j: number) => (
                                             <td key={j} className="px-4 py-2 font-mono">
                                                 {val !== 0 ? val.toFixed(5) : <span className="text-slate-200">-</span>}
                                             </td>
@@ -106,5 +150,14 @@ export default function NewtonPage() {
         )}
       </div>
     </div>
+  )
+}
+
+// 2. ENVOLTORIO SUSPENSE
+export default function NewtonPage() {
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center text-purple-600">Cargando Laboratorio...</div>}>
+      <NewtonContent />
+    </Suspense>
   )
 }
